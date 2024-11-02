@@ -1,11 +1,10 @@
 interface Subject {
-  dayofweek: string;
   class_name: string;
-  time: string;
+  dayofweek: string;
+  begin_time: string;
+  end_time: string;
 }
 
-interface TimetableProps {
-  addSubject: (subject: Subject) => void;
-}
+type ScheduleData = Subject[][];
 
-export { Subject, TimetableProps };
+export type { Subject, ScheduleData };

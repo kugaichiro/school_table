@@ -1,4 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import '../../styles/App.css';
+import updateSchedule from './EditScheduleform';
+import { ScheduleData, Subject } from '../common/Subject';
+
+function generateUniqueKey(prefix: string): React.Key {
+  return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+const InputForm = function (
+  cell: Subject,
+  classesArray: ScheduleData,
+  setClassesArray: React.Dispatch<React.SetStateAction<ScheduleData>>,
+  rowIndex: number,
+  colIndex: number,
+) {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setClassesArray(
+        updateSchedule(
+          classesArray,
+          {
+            class_name: e.target.value,
+            dayofweek: '',
+            begin_time: '',
+            end_time: '',
+          },
+          rowIndex,
+          colIndex,
+        ),
+      );
+    },
+    [classesArray, rowIndex, colIndex, setClassesArray],
+  );
+
+  return (
+    <input
+      className="class_name"
+      key={`cell_${rowIndex}_${colIndex}`}
+      value={cell?.class_name}
+      onChange={handleChange}
+    />
+  );
+};
 
 // 関数コンポーネントを通常の関数宣言に変更
 const EditTimetable: React.FC = function () {
@@ -14,15 +57,21 @@ const EditTimetable: React.FC = function () {
   const days = ['', '月', '火', '水', '木', '金', '土', '日'];
   const displayDays = days.slice(0, numOfDayOfWeek + 1);
 
-  const classesArray = Array.from({ length: numOfClass }, () =>
-    Array.from({ length: numOfDayOfWeek + 1 }, (_, index) =>
-      index === 0 ? '' : '空きマス',
+  const [classesArray, setClassesArray] = useState<ScheduleData>(
+    Array.from({ length: numOfClass }, () =>
+      Array.from(
+        { length: numOfDayOfWeek + 1 },
+        () =>
+          ({
+            class_name: '',
+            dayofweek: '',
+            begin_time: '',
+            end_time: '',
+          }) as Subject,
+      ),
     ),
   );
 
-  function generateUniqueKey(prefix: string): React.Key {
-    return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
-  }
   return (
     <div>
       <h1>時間割の編集</h1>
@@ -66,10 +115,18 @@ const EditTimetable: React.FC = function () {
             </tr>
           </thead>
           <tbody>
-            {classesArray.map((classTime) => (
+            {classesArray.map((classTime, rowIndex) => (
               <tr key={generateUniqueKey('class')}>
-                {classTime.map((subject) => (
-                  <td key={generateUniqueKey('subject')}>{subject}</td>
+                {classTime.map((cell: Subject, colIndex: number) => (
+                  <td key={generateUniqueKey('subject')}>
+                    {InputForm(
+                      cell,
+                      classesArray,
+                      setClassesArray,
+                      rowIndex,
+                      colIndex,
+                    )}
+                  </td>
                 ))}
               </tr>
             ))}
