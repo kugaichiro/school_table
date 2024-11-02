@@ -11,8 +11,8 @@ const CsvEditor = () => {
       Papa.parse(file, {
         complete: (result) => {
           const parsedData = result.data
-            .filter(row => row.length >= 2) // 不要な行を除外
-            .map(row => ({ startTime: row[0], endTime: row[1] }));
+            .filter((row) => row.length >= 2) // 不要な行を除外
+            .map((row) => ({ startTime: row[0], endTime: row[1] }));
           setData(parsedData);
         },
         header: false,
@@ -30,7 +30,7 @@ const CsvEditor = () => {
 
   // 編集したデータをCSVとしてダウンロードする処理
   const handleDownload = () => {
-    const csv = Papa.unparse(data.map(row => [row.startTime, row.endTime]));
+    const csv = Papa.unparse(data.map((row) => [row.startTime, row.endTime]));
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -38,6 +38,14 @@ const CsvEditor = () => {
     link.setAttribute('download', 'edited_data.csv');
     link.click();
   };
+
+  return (
+    <div>
+      <input type="file" onChange={handleFileUpload} />
+      <button onClick={handleDownload}>Download CSV</button>
+      {/* 他のUI要素や編集機能をここに追加 */}
+    </div>
+  );
 };
 
 export default CsvEditor;
