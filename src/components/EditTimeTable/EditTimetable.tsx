@@ -15,7 +15,7 @@ const EditTimetable: React.FC<EditTimetableProps> = ({ subjects, addSubject }) =
   const [ numOfDayOfWeek, setDay] = useState<string>('5');
   const [numOfClass, setClass] = useState<string>('5');
   const [time, setTime] = useState<string>('');
-  const subjects = subjects;
+  const subject = subjects;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     addSubject({ numOfDayOfWeek, numOfClass, time });
