@@ -12,10 +12,10 @@ interface EditTimetableProps {
 }
 
 const EditTimetable: React.FC<EditTimetableProps> = ({ subjects, addSubject }) => {
-  const [numOfDayOfWeek, setDay] = useState<string>('5');
+  const [ numOfDayOfWeek, setDay] = useState<string>('5');
   const [numOfClass, setClass] = useState<string>('5');
   const [time, setTime] = useState<string>('');
-
+  const subjects = subjects;
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     addSubject({ numOfDayOfWeek, numOfClass, time });
@@ -29,8 +29,9 @@ const EditTimetable: React.FC<EditTimetableProps> = ({ subjects, addSubject }) =
   const displayDays = days.slice(0, numDays + 1);
   const numClasses = parseInt(numOfClass, 10) || 0;
   const classesArray = Array.from({ length: numClasses }, () =>
-    Array.from({ length: numDays + 1 }, (_, index) => (index === 0 ? '' : '空きマス'))
-  );
+    Array.from({ length: numDays + 1 }, (_, index) =>
+      index === 0 ? '' : '空きマス',)
+  ),
 
   return (
     <div>
@@ -63,19 +64,26 @@ const EditTimetable: React.FC<EditTimetableProps> = ({ subjects, addSubject }) =
       </form>
       <div>
         <h2>現在の科目</h2>
-        <table border={1} style={{ width: '100%', tableLayout: 'fixed', height: '100%' }}>
+        <table
+          border={1}
+          style={{
+            width: '100%',
+            tableLayout: 'fixed',
+            height: '100%',
+          }}
+        >
           <thead>
             <tr>
-              {displayDays.map((day, index) => (
-                <th key={`day-${index}`}>{day}</th>
+              {displayDays.map((day) => (
+                <th key={generateUniqueKey("day")}>{day}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {classesArray.map((classTime, rowIndex) => (
-              <tr key={`class-${rowIndex}`}>
-                {classTime.map((subject, colIndex) => (
-                  <td key={`subject-${colIndex}`}>{subject}</td>
+            {classesArray.map((classTime) => (
+              <tr key={generateUniqueKey("class")}>
+                {classTime.map((subject) => (
+                  <td key={generateUniqueKey("subject")}>{subject}</td>
                 ))}
               </tr>
             ))}
