@@ -1,11 +1,16 @@
+interface Time {
+  startTime: string;
+  endTime: string;
+}
+
 interface TableOptions {
   numOfDayOfWeek: string;
   numOfClass: string;
-  time: string;
+  time: Time[];
 }
 
 interface EditTimetableProps {
   addOpitions: (subject: TableOptions) => void;
 }
 
-export { TableOptions, EditTimetableProps };
+export { Time, TableOptions, EditTimetableProps };
