@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Timetable from '../components/Timetable';
-import EditTimetable from '../components/EditTimeTable/EditTimetable';
 import '../styles/App.css';
+import Timetable from '../components/Timetable'; // Timetable コンポーネントのインポート
+import EditTimetable from '../components/EditTimeTable/EditTimetable'; // EditTimetable コンポーネントのインポート
 
-const App: React.FC = () => {
+// 通常の関数宣言に変更
+const App: React.FC = function () {
   return (
     <Router>
       <div className="App">
@@ -12,11 +13,8 @@ const App: React.FC = () => {
           <Link to="/">時間割</Link> | <Link to="/edit">編集</Link>
         </nav>
         <Routes>
-          <Route path="/" element={<Timetable subjects={[]} />} />
-          <Route
-            path="/edit"
-            element={<EditTimetable subjects={[]} addSubject={() => {}} />}
-          />
+          <Route path="/" element={<Timetable />} />
+          <Route path="/edit" element={<EditTimetable />} />
         </Routes>
       </div>
     </Router>
