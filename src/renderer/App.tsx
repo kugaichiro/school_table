@@ -1,27 +1,23 @@
-import React, { useState } from 'react';
-import Timetable from '../components/Timetable';
-import SubjectForm from '../components/SubjectForm';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import '../styles/App.css';
+import Timetable from '../components/Timetable'; // Timetable コンポーネントのインポート
+import EditTimetable from '../components/EditTimeTable/EditTimetable'; // EditTimetable コンポーネントのインポート
 
-interface Subject {
-  day: string;
-  name: string;
-  time: string;
-}
-
-const App: React.FC = function App() {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-
-  const addSubject = (subject: Subject) => {
-    setSubjects([...subjects, subject]);
-  };
-
+// 通常の関数宣言に変更
+const App: React.FC = function () {
   return (
-    <div className="App">
-      <h1>時間割アプリ</h1>
-      <SubjectForm addSubject={addSubject} />
-      <Timetable subjects={subjects} />
-    </div>
+    <Router>
+      <div className="App">
+        <nav>
+          <Link to="/">時間割</Link> | <Link to="/edit">編集</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Timetable />} />
+          <Route path="/edit" element={<EditTimetable />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
