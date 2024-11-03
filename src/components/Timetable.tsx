@@ -33,13 +33,11 @@ const Timetable: React.FC = function Timetable() {
             setData(parsedData); // データをステートに設定
           },
           error: function (error: any) { // 無名関数を通常の関数に変更
-            // エラーが発生した場合はここで処理
             console.error('Error parsing CSV:', error);
           },
         });
       })
       .catch(function (error) { // 無名関数を通常の関数に変更
-        // エラーが発生した場合はここで処理
         console.error('Error fetching CSV:', error);
       });
   }, []);
