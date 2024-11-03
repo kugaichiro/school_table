@@ -16,28 +16,30 @@ const Timetable: React.FC = function Timetable() {
   useEffect(() => {
     // publicフォルダ内のCSVファイルを読み込む
     fetch('/time_table.csv')
-      .then((response) => {
+      .then(function (response) {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.text(); // テキストとしてレスポンスを取得
       })
-      .then((csvText) => {
+      .then(function (csvText) {
         // CSVテキストをパースする
         Papa.parse<Subject>(csvText, {
           header: true, // ヘッダー行をオブジェクトのキーとして扱う
           dynamicTyping: true, // 数値を自動的に数値型に変換
-          complete: (results) => {
+          complete: function (results) {
             // 読み込んだデータをSubject型の配列に格納
             const parsedData: Subject[] = results.data as Subject[]; // 型キャスト
             setData(parsedData); // データをステートに設定
           },
-          error: (error: any) => {
+          error: function (error: any) {
+            // エラーが発生した場合はここで処理
             console.error('Error parsing CSV:', error);
           },
         });
       })
-      .catch((error) => {
+      .catch(function (error) {
+        // エラーが発生した場合はここで処理
         console.error('Error fetching CSV:', error);
       });
   }, []);
@@ -47,7 +49,7 @@ const Timetable: React.FC = function Timetable() {
       <thead>
         <tr>
           {days.map((day, index) => (
-            <th key={index} className="day">
+            <th key={day} className="day">
               {day}曜日
             </th>
           ))}
@@ -55,9 +57,9 @@ const Timetable: React.FC = function Timetable() {
       </thead>
       <tbody>
         {data.map((row, rowIndex) => (
-          <tr key={rowIndex}>
+          <tr key={`${rowIndex}-${row.class_name}`}> {/* ユニークなキーを生成 */}
             {Object.values(row).map((value, valueIndex) => (
-              <td key={valueIndex} className="subject">
+              <td key={`${rowIndex}-${valueIndex}`} className="subject"> {/* ユニークなキーを生成 */}
                 {value}
               </td>
             ))}
