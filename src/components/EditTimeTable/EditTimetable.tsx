@@ -3,7 +3,6 @@ import '../../styles/App.css';
 import updateSchedule from './EditScheduleform';
 import { ScheduleData, Subject } from '../common/Subject';
 import { Time } from '../common/Tableoptions';
-//simport saveCsv from './ControlCSV';
 
 function generateUniqueKey(prefix: string): React.Key {
   return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
@@ -62,8 +61,6 @@ const EditTimetable: React.FC = function () {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    //saveCsv(classesArray);
   };
 
   const days = ['', '月', '火', '水', '木', '金', '土', '日'];
