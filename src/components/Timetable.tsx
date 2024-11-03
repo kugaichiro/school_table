@@ -30,8 +30,7 @@ const Timetable: React.FC = function Timetable() {
             const parsedData: Subject[] = results.data as Subject[];
             setData(parsedData);
           },
-          error: (parseError) => {
-            // 引数の名前を変更
+          error: (parseError: Error) => { // 引数の型をErrorに変更
             setError(`Error parsing CSV: ${parseError.message}`);
           },
         });
@@ -50,8 +49,7 @@ const Timetable: React.FC = function Timetable() {
 
   return (
     <div>
-      {error && <div className="error">{error}</div>}{' '}
-      {/* エラーメッセージを表示 */}
+      {error && <div className="error">{error}</div>} {/* エラーメッセージを表示 */}
       <table className="timetable">
         <thead>
           <tr>
