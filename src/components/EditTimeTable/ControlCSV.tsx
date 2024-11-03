@@ -1,27 +1,70 @@
-import fs from 'fs';
-import path from 'path';
 import { Subject } from '../common/Subject';
+import { Time } from '../common/Tableoptions';
 
 // 配列データをCSV形式に変換する関数
-const arrayToCsv = (dataArray: Subject[][]) => {
-  return dataArray
-    .map((row) => Object.values(row).join(',')) // 各行をカンマで区切り
+const arrayToTableCsv = (dataArray: Subject[][]) => {
+  const header = '月,火,水,木,金,土,日';
+  const rows = dataArray
+    .map((row) =>
+      row
+        .slice(1)
+        .map((subject) => subject.class_name)
+        .join(','),
+    ) // 各行をカンマで区切り
     .join('\n'); // 行ごとに改行
+  return [header, rows].join('\n');
 };
 
-// CSV保存関数
-const saveCsv = (dataArray: Subject[][]) => {
-  const csvContent = arrayToCsv(dataArray);
-  const relativePath = '../../../public/timetable.csv';
-  const absolutePath = path.resolve(relativePath);
+const arrayToScheduleCsv = (dataArray: Time[][]): string => {
+  const header = 'starttime,endtime';
+  const rows = dataArray.map((row) =>
+    row[0] ? `${row[0].startTime},${row[0].endTime}` : '',
+  );
 
-  fs.writeFile(absolutePath, csvContent, 'utf8', (err) => {
-    if (err) {
-      console.error('CSVファイルの保存中にエラーが発生しました:', err);
-    } else {
-      console.log('CSVファイルが正常に保存されました:', absolutePath);
-    }
+  // ヘッダーとデータを結合し、行ごとに改行
+  return [header, ...rows].join('\n');
+};
+
+// CSVダウンロード関数
+const downloadCsv = (
+  dataArray: Subject[][],
+  relativePathTable = 'time_table.csv',
+  relativePathSchedule = 'time_schedule.csv',
+) => {
+  const csvContentTable = arrayToTableCsv(dataArray);
+  const blobTable = new Blob([csvContentTable], {
+    type: 'text/csv;charset=utf-8;',
   });
+  const link = document.createElement('a');
+
+  // CSVファイルをダウンロードするリンクを作成
+  if (link.download !== undefined) {
+    // ブラウザのサポートを確認
+    const url = URL.createObjectURL(blobTable);
+    link.setAttribute('href', url);
+    link.setAttribute('download', relativePathTable); // 相対パスをファイル名に指定
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const csvContentSchedule = arrayToScheduleCsv(
+    dataArray as unknown as Time[][],
+  );
+  const blobSchedule = new Blob([csvContentSchedule], {
+    type: 'text/csv;charset=utf-8;',
+  });
+  if (link.download !== undefined) {
+    // ブラウザのサポートを確認
+    const url = URL.createObjectURL(blobSchedule);
+    link.setAttribute('href', url);
+    link.setAttribute('download', relativePathSchedule); // 相対パスをファイル名に指定
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 };
 
-export default saveCsv;
+export default downloadCsv;
