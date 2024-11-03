@@ -3,6 +3,7 @@ import '../../styles/App.css';
 import updateSchedule from './EditScheduleform';
 import { ScheduleData, Subject } from '../common/Subject';
 import { Time } from '../common/Tableoptions';
+//simport saveCsv from './ControlCSV';
 
 function generateUniqueKey(prefix: string): React.Key {
   return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
@@ -46,13 +47,6 @@ const EditTimetable: React.FC = function () {
   const [numOfDayOfWeek, setDay] = useState<number>(5);
   const [numOfClass, setClass] = useState<number>(5);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
-  const days = ['', '月', '火', '水', '木', '金', '土', '日'];
-  const displayDays = days.slice(0, numOfDayOfWeek + 1);
-
   const [classesArray, setClassesArray] = useState<ScheduleData>(
     Array.from({ length: numOfClass }, () =>
       Array.from({ length: numOfDayOfWeek + 1 }, (_, index) =>
@@ -65,6 +59,15 @@ const EditTimetable: React.FC = function () {
       ),
     ) as ScheduleData,
   );
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    //saveCsv(classesArray);
+  };
+
+  const days = ['', '月', '火', '水', '木', '金', '土', '日'];
+  const displayDays = days.slice(0, numOfDayOfWeek + 1);
 
   return (
     <div>
@@ -88,72 +91,73 @@ const EditTimetable: React.FC = function () {
           min="1"
         />
         <button type="submit">追加</button>
-      </form>
-      <div>
-        <h2>現在の科目</h2>
-        <table
-          border={1}
-          style={{ width: '100%', tableLayout: 'fixed', height: '100%' }}
-        >
-          <thead>
-            <tr>
-              {displayDays.map((day) => (
-                <th key={day}>{day}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {classesArray.map((classTime, rowIndex) => (
-              <tr key={generateUniqueKey('class')}>
-                {classTime.map((cell: Subject, colIndex: number) => (
-                  <td key={generateUniqueKey('subject')}>
-                    {colIndex === 0 ? (
-                      <>
-                        <input
-                          type="time"
-                          value={(cell as unknown as Time).startTime || ''}
-                          onChange={(e) => {
-                            const newClassesArray = [...classesArray];
-                            (newClassesArray[rowIndex][
-                              colIndex
-                            ] as unknown as Time) = {
-                              startTime: e.target.value,
-                              endTime: '',
-                            };
-                            setClassesArray(newClassesArray);
-                          }}
-                        />
-                        <input
-                          type="time"
-                          value={(cell as unknown as Time).endTime || ''}
-                          onChange={(e) => {
-                            const newClassesArray = [...classesArray];
-                            (newClassesArray[rowIndex][
-                              colIndex
-                            ] as unknown as Time) = {
-                              startTime: (cell as unknown as Time).startTime,
-                              endTime: e.target.value,
-                            };
-                            setClassesArray(newClassesArray);
-                          }}
-                        />
-                      </>
-                    ) : (
-                      <InputForm
-                        cell={cell}
-                        classesArray={classesArray}
-                        setClassesArray={setClassesArray}
-                        rowIndex={rowIndex}
-                        colIndex={colIndex}
-                      />
-                    )}
-                  </td>
+
+        <div>
+          <h2>現在の科目</h2>
+          <table
+            border={1}
+            style={{ width: '100%', tableLayout: 'fixed', height: '100%' }}
+          >
+            <thead>
+              <tr>
+                {displayDays.map((day) => (
+                  <th key={day}>{day}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {classesArray.map((classTime, rowIndex) => (
+                <tr key={generateUniqueKey('class')}>
+                  {classTime.map((cell: Subject, colIndex: number) => (
+                    <td key={generateUniqueKey('subject')}>
+                      {colIndex === 0 ? (
+                        <>
+                          <input
+                            type="time"
+                            value={(cell as unknown as Time).startTime || ''}
+                            onChange={(e) => {
+                              const newClassesArray = [...classesArray];
+                              (newClassesArray[rowIndex][
+                                colIndex
+                              ] as unknown as Time) = {
+                                startTime: e.target.value,
+                                endTime: '',
+                              };
+                              setClassesArray(newClassesArray);
+                            }}
+                          />
+                          <input
+                            type="time"
+                            value={(cell as unknown as Time).endTime || ''}
+                            onChange={(e) => {
+                              const newClassesArray = [...classesArray];
+                              (newClassesArray[rowIndex][
+                                colIndex
+                              ] as unknown as Time) = {
+                                startTime: (cell as unknown as Time).startTime,
+                                endTime: e.target.value,
+                              };
+                              setClassesArray(newClassesArray);
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <InputForm
+                          cell={cell}
+                          classesArray={classesArray}
+                          setClassesArray={setClassesArray}
+                          rowIndex={rowIndex}
+                          colIndex={colIndex}
+                        />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </form>
     </div>
   );
 };
