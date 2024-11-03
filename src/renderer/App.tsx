@@ -4,8 +4,6 @@ import '../styles/App.css';
 import Timetable from '../components/Timetable'; // Timetable コンポーネントのインポート
 import EditTimetable from '../components/EditTimeTable/EditTimetable'; // EditTimetable コンポーネントのインポート
 
-
-
 // 通常の関数宣言に変更
 const App: React.FC = function () {
   return (
