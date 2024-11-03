@@ -16,29 +16,29 @@ const Timetable: React.FC = function Timetable() {
   useEffect(() => {
     // publicフォルダ内のCSVファイルを読み込む
     fetch('/time_table.csv')
-      .then(function (response) {
+      .then(function (response) { // 無名関数を通常の関数に変更
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.text(); // テキストとしてレスポンスを取得
       })
-      .then(function (csvText) {
+      .then(function (csvText) { // 無名関数を通常の関数に変更
         // CSVテキストをパースする
         Papa.parse<Subject>(csvText, {
           header: true, // ヘッダー行をオブジェクトのキーとして扱う
           dynamicTyping: true, // 数値を自動的に数値型に変換
-          complete: function (results) {
+          complete: function (results) { // 無名関数を通常の関数に変更
             // 読み込んだデータをSubject型の配列に格納
             const parsedData: Subject[] = results.data as Subject[]; // 型キャスト
             setData(parsedData); // データをステートに設定
           },
-          error: function (error: any) {
+          error: function (error: any) { // 無名関数を通常の関数に変更
             // エラーが発生した場合はここで処理
             console.error('Error parsing CSV:', error);
           },
         });
       })
-      .catch(function (error) {
+      .catch(function (error) { // 無名関数を通常の関数に変更
         // エラーが発生した場合はここで処理
         console.error('Error fetching CSV:', error);
       });
@@ -48,7 +48,7 @@ const Timetable: React.FC = function Timetable() {
     <table className="timetable">
       <thead>
         <tr>
-          {days.map((day, index) => (
+          {days.map((day) => (
             <th key={day} className="day">
               {day}曜日
             </th>
@@ -57,9 +57,9 @@ const Timetable: React.FC = function Timetable() {
       </thead>
       <tbody>
         {data.map((row, rowIndex) => (
-          <tr key={`${rowIndex}-${row.class_name}`}> {/* ユニークなキーを生成 */}
+          <tr key={`${row.dayofweek}-${row.class_name}`}> {/* ユニークなキーを生成 */}
             {Object.values(row).map((value, valueIndex) => (
-              <td key={`${rowIndex}-${valueIndex}`} className="subject"> {/* ユニークなキーを生成 */}
+              <td key={`${row.dayofweek}-${valueIndex}`} className="subject"> {/* ユニークなキーを生成 */}
                 {value}
               </td>
             ))}
