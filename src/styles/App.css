@@ -16,7 +16,6 @@ body {
   overflow-y: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 button {
@@ -77,6 +76,13 @@ input {
   font-size: 16px;
 }
 
+.class_name {
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
 .timetable {
   width: 100%;
   border-collapse: collapse;
@@ -97,4 +103,9 @@ input {
   background-color: #dd5789;
   text-align: center;
   border-radius: 5px;
+}
+
+th, td {
+  text-align: center;        /* セル内のテキストを中央揃え */
+  overflow: hidden;          /* セル内のオーバーフローを隠す */
 }
