@@ -31,8 +31,10 @@ const Timetable: React.FC = function Timetable() {
             setData(parsedData);
           },
           error: (parseError: Error) => {
+
             // 引数の型をErrorに変更
             setError(`Error parsing CSV: ${parseError.message}`);
+            
           },
         });
       } catch (fetchError) {
@@ -49,6 +51,7 @@ const Timetable: React.FC = function Timetable() {
   }, []);
 
   return (
+
     <div>
       {error && <div className="error">{error}</div>}
       <table className="timetable">
@@ -77,6 +80,7 @@ const Timetable: React.FC = function Timetable() {
         </tbody>
       </table>
     </div>
+
   );
 };
 
